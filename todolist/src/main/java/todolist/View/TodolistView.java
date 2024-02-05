@@ -32,7 +32,7 @@ import javax.swing.JTextField;
 public class TodolistView extends JFrame {
     // atributos
     private JPanel mainPanel;
-    private JTextField taskInputField;
+    private JTextField taskInputNameField;
     private JButton addButton;
     private JList<String> taskList;
     private DefaultListModel<String> listModel;
@@ -43,7 +43,6 @@ public class TodolistView extends JFrame {
     private List<Task> tasks;
 
     public TodolistView() {
-
         super("TO-DO List App");
         // this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(700, 700);
@@ -55,10 +54,11 @@ public class TodolistView extends JFrame {
         listModel = new DefaultListModel<>();
         taskList = new JList<>(listModel);
 
-        // Inicializa campos de entrada, botões e JComboBox
-        new TodolistDAO().criaTabela();
 
-        taskInputField = new JTextField("Digite sua tarefa...");
+        new TodolistDAO().criaTabela();// Criando a tabela
+        // Inicializa campos de entrada, botões e JComboBox
+
+        taskInputNameField = new JTextField("Digite sua tarefa...");
         addButton = new JButton("Adicionar Tarefa");
         deleteButton = new JButton("Excluir Tarefa");
         markDoneButton = new JButton("Concluir a Tarefa");
@@ -67,7 +67,7 @@ public class TodolistView extends JFrame {
         clearCompletedButton = new JButton("Limpar Concluídas");
         // Configuração do painel de entrada
         JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.add(taskInputField, BorderLayout.CENTER);
+        inputPanel.add(taskInputNameField, BorderLayout.CENTER);
         // inputPanel.add(addButton, BorderLayout.EAST);
         inputPanel.add(filterComboBox, BorderLayout.EAST);
         // Configuração do painel de botões
@@ -88,12 +88,12 @@ public class TodolistView extends JFrame {
         // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         // Estilização :
-        taskInputField.setBackground(new Color(63, 62, 64));
-        taskInputField.setBorder(BorderFactory.createLineBorder(new Color(93, 92, 94, 10), 5));
-        // taskInputField.setForeground(Color.WHITE);
+        taskInputNameField.setBackground(new Color(63, 62, 64));
+        taskInputNameField.setBorder(BorderFactory.createLineBorder(new Color(93, 92, 94, 10), 5));
+        // taskInputNameField.setForeground(Color.WHITE);
 
         taskList.setBackground(new Color(93, 92, 94));
-        taskInputField.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 10), 5));
+        taskInputNameField.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 10), 5));
         taskList.setForeground(Color.WHITE);
 
         buttonPanel.setBackground(new Color(27, 27, 28));
@@ -120,7 +120,7 @@ public class TodolistView extends JFrame {
         TodolistControl controller = new TodolistControl(tasks, taskList, listModel);
         // ActionListeners :
         addButton.addActionListener(e -> { // Adicionando o ouvinte ao addButton
-            controller.addTask(taskInputField.getText().trim()); // Ao clicar no botão 'Adicionar' executa o método addTask().
+            controller.addTask(taskInputNameField.getText().trim()); // Ao clicar no botão 'Adicionar' executa o método addTask().
         });
 
         deleteButton.addActionListener(e -> { // Adicionando o ouvinte ao deleteButton
@@ -143,15 +143,15 @@ public class TodolistView extends JFrame {
         // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         // KeyListeners :
-        taskInputField.addKeyListener(new KeyAdapter() {
+        taskInputNameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    controller.addTask(taskInputField.getText().trim());
+                    controller.addTask(taskInputNameField.getText().trim());
                 }
 
             }
-        }); // Adicionando o ouvinte a taskInputField
+        }); // Adicionando o ouvinte a taskInputNameField
 
         taskList.addKeyListener(new KeyAdapter() {
             @Override
@@ -182,20 +182,20 @@ public class TodolistView extends JFrame {
         // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         // FocusListeners :
-        taskInputField.addFocusListener(new FocusAdapter() {
+        taskInputNameField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) { // Quando o campo é clicado , "ganha o foco"
-                if (taskInputField.getText().equals("Digite sua tarefa...")) {
-                    taskInputField.setText(""); // O texto é limpado
-                    taskInputField.setForeground(Color.WHITE); // Cor do texto Branco
+                if (taskInputNameField.getText().equals("Digite sua tarefa...")) {
+                    taskInputNameField.setText(""); // O texto é limpado
+                    taskInputNameField.setForeground(Color.WHITE); // Cor do texto Branco
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) { // Quando outro componente é clicado , "perde o foco"
-                if (taskInputField.getText().isEmpty()) {
-                    taskInputField.setForeground(Color.GRAY); // Cor do texto cinza
-                    taskInputField.setText("Digite sua tarefa..."); // Um texto padrão é colocado
+                if (taskInputNameField.getText().isEmpty()) {
+                    taskInputNameField.setForeground(Color.GRAY); // Cor do texto cinza
+                    taskInputNameField.setText("Digite sua tarefa..."); // Um texto padrão é colocado
                 }
             }
         });
@@ -211,6 +211,8 @@ public class TodolistView extends JFrame {
             }
 
         });
+
+        controller.updateTaskList();
     }
     // xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 

@@ -2,21 +2,42 @@ package todolist.Model;
 
 public class Task {
     // atributos
-    private String description;
+    // private int usuario;
+    private String data;
+    private String nome;
     private boolean done;
 
-    public Task(String description) {
-        this.description = description;
+    // Métodos
+    public Task(String data, String nome) {
+        // this.usuario = usuario;
+        this.data = data;
+        this.nome = nome;
         this.done = false;
     }
 
-    // Getters and Setters
-    public String getDescription() {
-        return description;
+    // Getters and setters
+    // public int getUsuario() {
+    //     return usuario;
+    // }
+
+    // public void setUsuario(int usuario) {
+    //     this.usuario = usuario;
+    // }
+
+    public String getData() {
+        return data;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public boolean isDone() {
@@ -26,4 +47,5 @@ public class Task {
     public void setDone(boolean done) {
         this.done = done;
     }
+
 }

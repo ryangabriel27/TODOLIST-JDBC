@@ -21,7 +21,7 @@ public class TodolistDAO {
 
      // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS listadetaferasapp (id integer NOT NULL PRIMARY KEY, NOME VARCHAR(255))";
+        String sql = "CREATE TABLE IF NOT EXISTS listadetarefasapp (id SERIAL NOT NULL PRIMARY KEY, NOME VARCHAR(255), DATA VARCHAR(255))";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela criada com sucesso.");
@@ -49,7 +49,7 @@ public class TodolistDAO {
                 // Para cada registro no ResultSet, cria um objeto Carros com os valores do
                 // registro
 
-                Task task = new Task(rs.getString("descricao"));
+                Task task = new Task(rs.getString("data"), rs.getString("nome"));
                 tasks.add(task); // Adiciona o objeto Clientes à lista de carros
             }
         } catch (SQLException ex) {
@@ -73,13 +73,14 @@ public class TodolistDAO {
         }
     }
 
-    public void cadastrar(String nome) {
+    public void cadastrar(String nome, String data) {
         PreparedStatement stmt = null;
         // Define a instrução SQL parametrizada para cadastrar na tabela
-        String sql = "INSERT INTO listadetarefasapp(nome) VALUES (?)";
+        String sql = "INSERT INTO listadetarefasapp(nome, data) VALUES (?, ?)";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, nome.toUpperCase().trim());
+            stmt.setString(2, data.trim());
             stmt.executeUpdate();
             System.out.println("Dados inseridos com sucesso");
         } catch (SQLException e) {

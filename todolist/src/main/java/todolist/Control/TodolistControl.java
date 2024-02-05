@@ -1,6 +1,9 @@
 package todolist.Control;
 
+import java.awt.image.DataBufferInt;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -29,16 +32,18 @@ public class TodolistControl {
                                                                                              // está vazio , caso não
                                                                                              // esteja adiciona uma task
                                                                                              // a lista
-            Task newTask = new Task(taskDescription);
+            LocalDateTime now = LocalDateTime.now();
+            Task newTask = new Task(String.valueOf(now), taskDescription);
             tasks.add(newTask);
+            new TodolistDAO().cadastrar(taskDescription, String.valueOf(now));
             JOptionPane.showMessageDialog(null, "Tarefa adicionada", "TODO-LIST", JOptionPane.INFORMATION_MESSAGE); // Notifica
-                                                                                                                   // o
-                                                                                                                   // usuário
-                                                                                                                   // que
-                                                                                                                   // uma
-                                                                                                                   // task
-                                                                                                                   // foi
-                                                                                                                   // adicionada
+                                                                                                                    // o
+                                                                                                                    // usuário
+                                                                                                                    // que
+                                                                                                                    // uma
+                                                                                                                    // task
+                                                                                                                    // foi
+                                                                                                                    // adicionada
             updateTaskList();
         }
     }
@@ -52,16 +57,17 @@ public class TodolistControl {
                                                                            // deseja excluir a task
 
             if (resposta == JOptionPane.YES_OPTION) {// Caso escolha a opção 'YES', a tarefa é excluída
+                new TodolistDAO().apagar((tarefaSelecionada + 1));
                 tasks.remove(tarefaSelecionada);
                 JOptionPane.showMessageDialog(null, "Tarefa excluída", "TODO-LIST", JOptionPane.INFORMATION_MESSAGE); // Notifica
-                                                                                                                     // o
-                                                                                                                     // usuário
-                                                                                                                     // de
-                                                                                                                     // que
-                                                                                                                     // a
-                                                                                                                     // tarefa
-                                                                                                                     // foi
-                                                                                                                     // excluída
+                                                                                                                      // o
+                                                                                                                      // usuário
+                                                                                                                      // de
+                                                                                                                      // que
+                                                                                                                      // a
+                                                                                                                      // tarefa
+                                                                                                                      // foi
+                                                                                                                      // excluída
                 updateTaskList();
             }
 
@@ -80,14 +86,14 @@ public class TodolistControl {
                 Task task = tasks.get(tarefaSelecionada);
 
                 JOptionPane.showMessageDialog(null, "Tarefa concluída", "TODO-LIST", JOptionPane.INFORMATION_MESSAGE); // Notifica
-                                                                                                                      // o
-                                                                                                                      // usuário
-                                                                                                                      // de
-                                                                                                                      // que
-                                                                                                                      // a
-                                                                                                                      // tarefa
-                                                                                                                      // foi
-                                                                                                                      // concluída
+                                                                                                                       // o
+                                                                                                                       // usuário
+                                                                                                                       // de
+                                                                                                                       // que
+                                                                                                                       // a
+                                                                                                                       // tarefa
+                                                                                                                       // foi
+                                                                                                                       // concluída
                 task.setDone(true);
                 updateTaskList();
             }
@@ -101,7 +107,7 @@ public class TodolistControl {
         for (Task task : tasks) {
             if (filter.equals("Todas") || (filter.equals("Ativas") &&
                     !task.isDone()) || (filter.equals("Concluídas") && task.isDone())) {
-                listModel.addElement(task.getDescription());
+                listModel.addElement(task.getNome());
             }
         }
     }
@@ -129,9 +135,9 @@ public class TodolistControl {
     public void updateTaskList() {
         // Atualiza a lista de tasks exibida na GUI
         listModel.clear();
+        tasks = new TodolistDAO().listarTodos();
         for (Task task : tasks) {
-            listModel.addElement(task.getDescription() + (task.isDone() ?
-                    " (Concluída)" : ""));
+            listModel.addElement(task.getNome() + (task.isDone() ? " (Concluída)" : ""));
         }
     }
 }

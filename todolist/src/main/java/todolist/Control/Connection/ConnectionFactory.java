@@ -14,7 +14,7 @@ public class ConnectionFactory {
     private static final String usuario = "postgres"; // nome do ADM do banco
     private static final String senha = "postgres";
 
-    // métodos
+    // Métodos
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection(url, usuario, senha);
