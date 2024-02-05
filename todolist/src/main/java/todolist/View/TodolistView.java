@@ -1,6 +1,7 @@
 package todolist.View;
 
 import todolist.Control.TodolistControl;
+import todolist.Control.TodolistDAO;
 import todolist.Model.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,7 @@ public class TodolistView extends JFrame {
         taskList = new JList<>(listModel);
 
         // Inicializa campos de entrada, botões e JComboBox
+        new TodolistDAO().criaTabela();
 
         taskInputField = new JTextField("Digite sua tarefa...");
         addButton = new JButton("Adicionar Tarefa");
@@ -145,7 +147,7 @@ public class TodolistView extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    addTask();
+                    controller.addTask(taskInputField.getText().trim());
                 }
 
             }
@@ -155,7 +157,7 @@ public class TodolistView extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_DELETE) { // Verifica se a tecla pressionada é a 'DELETE'
-                    deleteTask(); // Se for , executa o método deleteTask(), apaga a tarefa.
+                    controller.deleteTask(taskList.getSelectedIndex()); // Se for , executa o método deleteTask(), apaga a tarefa.
                 }
 
             }
@@ -171,7 +173,7 @@ public class TodolistView extends JFrame {
                                                                                      // e
                     // se foram com o botão esquerdo do
                     // mouse.
-                    markTaskDone(); // Caso tenha dado 2 click seguidos com o botão esquerdo do mouse , executa o
+                    controller.markTaskDone(taskList.getSelectedIndex()); // Caso tenha dado 2 click seguidos com o botão esquerdo do mouse , executa o
                     // método markTaskDone(), marca a tarefa como concluída
                 }
             }
@@ -218,7 +220,7 @@ public class TodolistView extends JFrame {
     }
 
     public void close() {
-        int resposta = JOptionPane.showConfirmDialog(null, "Você deseja sair do app?", getTitle(),
+        int resposta = JOptionPane.showConfirmDialog(null, "Você deseja sair do app?", "TODO-LIST",
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE); // Pergunta ao usuário se deseja fechar o app
         if (resposta == JOptionPane.YES_OPTION) { // Caso escolha 'YES' , o app é fechado.
             this.setDefaultCloseOperation(EXIT_ON_CLOSE);
